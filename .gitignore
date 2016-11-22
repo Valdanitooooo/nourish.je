@@ -1,0 +1,6 @@
+_site
+_drafts
+.env
+bower_components
+node_modules
+semantic/dist

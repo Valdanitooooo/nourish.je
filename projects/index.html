@@ -1,0 +1,36 @@
+---
+layout: sidebar
+title: Projects
+description: "A log of software projects and hardware builds."
+paginate:
+  collection: projects
+  title_suffix: ''
+---
+A log of software projects and hardware builds.
+
+<div class="ui divided link items">
+  {% for project in page.projects %}
+  <a class="item" href="{{ project.url | remove_index }}">
+    <div class="ui medium image">
+      <img alt="{{ project.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ project.image }}" />
+    </div>
+    <div class="content">
+      <div class="header">{{ project.title }}</div>
+      <div class="meta">{% for tag in project.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</div>
+      <div class="description">{{ project.description }}</div>
+      <div class="extra">
+        <div class="ui right floated primary button" role="button">View Project</div>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="ui divider"></div>
+
+{% if page.previous %}
+<div style="float:left"><a href="{{ page.previous.url }}">← Page {{ page.paginate.page_num | minus: 1}}</a></div>
+{% endif %}
+{% if page.next%}
+<div style="float:right"><a href="{{ page.next.url }}">Page {{ page.paginate.page_num | plus: 1 }} →</a></div>
+{% endif %}

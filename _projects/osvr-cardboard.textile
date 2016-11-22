@@ -1,0 +1,57 @@
+---
+title:  "OSVR Cardboard"
+description: 'OSVR Cardboard lets you play OSVR compatible virtual reality PC games using a Google Cardboard viewer.'
+date:   2016-11-21 16:42:23
+tags: [OSVR, vr, iOS, software, google cardboard]
+categories: [software]
+image: osvr-cardboard.jpg
+---
+
+<div class="ui stackable equal width grid">
+<div class="column">
+<span class="ui header">"OSVR Cardboard":osvr-cardboard</span> is an iOS app, based on the open source "Moonlight":moonlight game streaming project, which acts as an orientation tracker and remote display for OSVR. This allows you to play PC VR games (including SteamVR games) on your phone using a Google Cardboard viewer.
+</div>
+{% include image src="osvr-cardboard.jpg" alt="OSVR Cardboard logo" %}
+</div>
+
+h2(ui dividing header). Usage
+
+First "set up Nvidia Gamestream to allow remote desktop streaming":remote-desktop. OSVR Cardboard relies on this step to stream games from the PC.
+
+Next, set up OSVR and get it working correctly - this is beyond the scope of this guide, but RTPC Mod Life has "an excellent video tutorial here":osvr-setup. Once this is set up, you need to install the latest "OSVR Cardboard plugin":https://github.com/simlrh/OSVR-Cardboard/releases by copying the dll file into the plugins folder (eg @C:/Program Files/OSVR/bin/osvr-plugins-0/@).
+
+Run @osvr-server@ and a window should popup, indicating everything is working correctly. You may need to allow the program network access so it can listen for the connection from your phone.
+
+Now run the iOS app, and swipe to the right to open the settings pane. Tap "Scan QR Code" and point the camera at the code printed on your Cardboard viewer - you should see a notification that the viewer has been configured. Go back to the main page and tap "Add Host" to pair with your PC (phone and PC must be on the same network). Once paired, tap the host to connect. 
+
+The name of your viewer and phone should appear on the OSVR Cardboard window on the PC. If this is the first time you've used this viewer, phone and stream resolution together, this configuration information has to be set inside OSVR to work; click Save to save the json file in your displays folder (eg @C:/Program Files/OSVR/bin/displays/@). Finally edit your osvr_server_config.json to use your new display config file and the phone's orientation tracker:
+
+<div class="ui segment">
+{% highlight json %}
+{
+    /* Only change these two lines, leaving the rest of the file the same */
+    "display": "displays/Virtoba V2-Steve.json", // Or the name of your config file
+    "aliases": {
+        "/me/head": "/je_nourish_cardboard/GoogleCardboard/tracker/0"
+    }
+}
+{% endhighlight %}
+</div>
+
+Restart @osvr-server@. If the iOS app is still streaming video, swipe left to disconnect then tap the host again to reconnect.
+
+The final step is to select the OSVR Cardboard window and click on "Viewer Resolution", to make the screen res match your phone.
+
+You can check the tracker is working correctly with OSVR's Tracker Viewer app. Rotating the phone should cause a corresponding rotation of the axes in the tracker viewer.
+
+Now run an OSVR compatible VR game, put the phone into the viewer and enjoy!
+
+h2(ui dividing header). SteamVR
+
+SteamVR support in OSVR Cardboard is experimental. SteamVR must be used in Extended mode. Start SteamVR, run your game, then find the Steam window named "Headset Window" and click inside it. This should make it fullscreen, and it will appear on the phone.
+
+[osvr-cardboard]https://github.com/simlrh/OSVR-Cardboard-iOS
+[moonlight]http://moonlight-stream.com/
+[remote-desktop]http://nvidia.custhelp.com/app/answers/detail/a_id/3489/~/shield-remote-desktop
+[osvr-setup]https://www.youtube.com/watch?v=Fc87MYZ8fCY  
+[osvr-cardboard-plugin]https://github.com/simlrh/OSVR-Cardboard/releases

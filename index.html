@@ -1,0 +1,180 @@
+---
+layout: default
+title: Steve Le Roy Harris
+container: false
+description: "Steve Le Roy Harris is a freelance web and native app developer based in East London."
+---
+
+<div class="jumbotron jumbotron-inverse">
+  <div class="ui stackable grid container">
+    <div class="row">
+      <div class="five wide column">
+        <img id="logo" src="{{ site.url }}/assets/images/nourish_logo.svg" />
+      </div>
+      <div class="eleven wide column">
+        <h1>Web and mobile apps</h1>
+        <p>Freelance front and back end development <br class="hidden-xs hidden-sm" />by Steve Le Roy Harris</p>
+        <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui container">
+  <div id="about" class="ui basic vertical segment">
+    <h1 class="ui dividing header">
+      About me
+      <div class="sub header">Steve Le Roy Harris is a freelance web and native app developer based in East London.</div>
+    </h1>
+    <div class="ui equal width grid">
+      <div class="column">
+        <img class="mobile only ui small circular right floated image" alt="Steve profile image" src="{{ site.url }}/assets/images/steve.jpg" />
+        <p>I've been developing for the web professionally for 7 years.<a href="#footnote">*</a> In that time I've built up a broad range of experience, feeling equally comfortable whether I'm coding the frontend of a site or the backend which supports it, designing the API or building the smartphone app to interact with it.</p>
+        <p>I'm thoroughly acquainted with all the acronyms that usually fill up a web dev's bio, but my strongest experience is in JavaScript (including Angular &amp; Backbone), PHP (particularly Wordpress &amp; Drupal) and Python (Django). I'm also a skilled native app developer with apps in the Apple App Store, Amazon App Store and Google Play.</p>
+        <p>Outside of work I have a keen interest in VR, 3d printing and homebrew electronics.</p>
+        <p>To get in touch email me at <a href="mailto:{{ site.email }}">{{ site.email }}</a> or text me on 07453 302 625. I'm also on the social networks below.</p>
+        <div class="ui equal width grid social">
+          <a class="column" alt="LinkedIn" title="LinkedIn" href="http://www.linkedin.com/pub/steve-le-roy-harris/92/b7/248"><img src="{{ site.url }}/assets/images/linkedin.png" width="55" height="55" /></a>
+          <a class="column" alt="Twitter" title="@{{ site.data.bio.twitter}} on Twitter" href="http://twitter.com/{{ site.data.bio.twitter }}"><img src="{{ site.url }}/assets/images/twitter.png" width="55" height="55" /></a>
+          <a class="column" alt="GitHub" title="{{ site.data.bio.github }} on GitHub" href="http://github.com/{{ site.data.bio.github }}"><img src="{{ site.url }}/assets/images/github.png" width="55" height="55" /></a>
+        </div>
+        <p id="footnote" class="meta"><small>* If you count the web design company I started as a 16 year old in the 90's, then it's 15 years! But let's not.</small></p>
+      </div>
+      <div class="mobile hidden five wide column">
+        <img class="ui circular fluid image" alt="Steve profile image" src="{{ site.url }}/assets/images/steve.jpg" />
+      </div>
+    </div>
+  </div>
+
+  <div id="case-studies" class="ui basic vertical segment">
+    <h2 class="ui dividing header">Case Studies<div class="sub header" style="float:right"><a href="/case-studies/">View all</a></div></h2>
+    <div class="ui four doubling stackable cards">
+      {% assign casestudies = site.casestudies | sort:'date' | reverse | slice: 0,4 %}
+      {% for casestudy in casestudies %}
+      <a class="ui card" {%if casestudy.link != null %}href="{{ casestudy.link }}"{% endif %}>
+        <div class="image">
+          <img class="ui image fluid" alt="{{ casestudy.name }} thumbnail image" src="{{ site.url }}/assets/images/{{ casestudy.image }}" />
+        </div>
+        <div class="content">
+          <h3 class="header">{{ casestudy.title }}</h3>
+          <p class="description">{{ casestudy.content }}</p>
+          <p class="meta">{% for tag in casestudy.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</p>
+        </div>
+        {% if casestudy.link != null %}<div class="ui bottom attached primary button">View site</div>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="projects" class="ui basic vertical segment">
+    <h2 class="ui dividing header">Projects <div class="sub header" style="float:right"><a href="/projects/">View all</a></div></h2>
+    <div class="ui four stackable link cards">
+      {% assign projects = site.projects | sort:'date' | reverse | slice: 0,4 %}
+      {% for project in projects %}
+      <a class="ui card" href="{{ project.url | remove_index }}">
+        <div class="image">
+          <img class="ui image fluid" alt="{{ project.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ project.image }}" />
+        </div>
+        <div class="content">
+          <h3 class="header">{{ project.title }}</h3>
+          <p class="description">{{ project.description }}</p>
+          <p class="meta">{% for tag in project.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</p>
+        </div>
+        <div class="ui bottom attached primary button">View project</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="log" class="ui basic vertical segment">
+    <h2 class="ui dividing header">Log <div class="sub header" style="float:right"><a href="/log/">View all</a></div></h2>
+    <div class="ui three stackable cards">
+      <div class="ui card">
+        <div class="content">
+          <div class="ui small feed">
+            {% assign posts = "" | split: "," | concat: site.projects | concat: site.articles | concat: site.tumbles | concat: site.casestudies | sort:'date' | reverse | slice: 0,5 %}
+            {% for post in posts %}
+              {% include {{ post.collection }}.html post=post excerpt=true %}
+            {% endfor %}
+          </div>
+        </div>
+        <a href="/log/" class="ui right floated primary button">View everything</a>
+      </div>
+      {% assign article = site.articles[0] %}
+      <div class="ui card" style="width:calc(66.666% - 2em)">
+        <div class="content">
+          <div class="ui dividing header">Latest article: <a href="{{ article.url | remove_index }}">{{ article.title }}</a><div class="sub header">{{ article.description }}</div></div>
+          <img class="ui left floated spaced medium image" src="{{ site.url }}/assets/images/{{ article.image }}">
+          <p>{{ article.excerpt }}</p>
+          <a class="ui right floated primary button" href="{{ article.url | remove_index }}">Read the rest</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="skills" class="ui basic vertical segment">
+    <h2 class="ui dividing header">Skills</h2>
+    <div class="">
+      <p>In 7 years in the industry I've gained a wide range of experience in front and back end development. I've worked with web services, both producing and consuming services marked up XML, JSON, YAML and Apple plist, and using REST and SOAP APIs.</p>
+      <p>Creating sites for highly popular one-off events has given me the skills to build scalable sites using PaaS like AWS and App Engine.</p>
+      <p>I've enjoyed the challenges of adapting to the mobile web, and providing responsive, touch and retina-enabled experiences is a vital part of the more day to day task of PSD/Illustrator to Worpress work.</p>
+      <br />
+    </div>
+    <div class="ui three stackable cards">
+      {% for category in site.data.skills %}
+      <div class="ui card">
+        <div class="content">
+          <div class="header">{{ category.name }}</div>
+          <div class="description">
+            <p>{{ category.description }}</p>
+          </div>
+
+          <ul class="ui list">
+            {% for skill in category.skills %}
+            <li class="item">
+              <h4 class="header">{{ skill.name }}</h4>
+              <p class="description">{{ skill.description }}</p>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+
+  <div id="contact" class="ui basic vertical segment">
+    <h2 class="ui dividing header">Contact me</h2>
+    <div class="ui stackable grid">
+      <div class="ten wide column row">
+        <div class="eight wide column">
+          <address>
+            <strong>Steve Le Roy Harris</strong><br />
+            e: <a href="mailto:{{ site.email }}">{{ site.email }}</a><br />
+            t: 07453 302 625
+          </address>
+        </div>
+        <div class="eight wide column">
+          <address>
+            <strong>Studio E1-1</strong><br />
+            <a href="http://www.bowarts.org/">Bow Arts Trust</a><br />
+            183 Bow Road<br />
+            London E3 2SJ
+          </address>
+        </div>
+        <div class="eight wide column">
+          <div class="ui equal width grid">
+            <a class="column" alt="LinkedIn" title="LinkedIn" href="http://www.linkedin.com/pub/steve-le-roy-harris/92/b7/248"><img src="{{ site.url }}/assets/images/linkedin.png" width="55" height="55" /></a>
+            <a class="column" alt="Twitter" title="@{{ site.data.bio.twitter}} on Twitter" href="http://twitter.com/{{ site.data.bio.twitter }}"><img src="{{ site.url }}/assets/images/twitter.png" width="55" height="55" /></a>
+            <a class="column" alt="GitHub" title="{{ site.data.bio.github }} on GitHub" href="http://github.com/{{ site.data.bio.github }}"><img src="{{ site.url }}/assets/images/github.png" width="55" height="55" /></a>
+          </div>
+        </div>
+      </div>
+      <div class="six wide column">
+        <a href="http://www.bowarts.org/"><img class="ui image rounded" alt="Bow Arts Lane" src="{{ site.url }}/assets/images/bowarts.jpg" /></a>
+      </div>
+    </div>
+  </div>
+</div>
+<p>&nbsp;</p>

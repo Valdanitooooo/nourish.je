@@ -1,0 +1,9 @@
+---
+title: Data Protection
+image: dataci.jpg
+tags: [Angular, JavaScript, PHP, Wordpress]
+date: 2016-05-02 14:22:00
+link: http://dataci.je/
+---
+
+The online registration process for the Channel Islands' data protection laws need to present a lot of complex information in an understandable way. This was achieved with a multistep Angular app and a drag and drop interface for selecting options.

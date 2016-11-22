@@ -1,0 +1,23 @@
+---
+title:  "wiimote-btstack"
+description: '<i class="bluetooth icon"></i>A custom Bluetooth stack for connecting to third-party Wii remotes not detected by the default stack. Lower level functions from the open source btstack allow communication with the unofficial devices.'
+date:   2016-10-27 16:53:00
+tags: [wii, wiimote, bluetooth, software]
+categories: [software]
+image: wiimotes.jpg
+---
+
+<figure><img class="ui rounded image" src="{{ site.image_folder }}/wiimotes.jpg" alt="Some Wii remotes which don't work" /></figure>
+
+I recently bought two Wii remotes with built-in Motion+ and two nunchuks for £25. They don't work. Windows doesn't even recognise them as Bluetooth devices.
+
+Rather than give up I tried to make them work, with some success. <span class="ui header">"wiimote-btstack":wiimote-btstack</span> is a work in progress project which uses the open source (although non-commercially licensed) "btstack":btstack bluetooth stack to connect to unofficial Wii remotes at a low level.
+
+These third party remotes seem to ignore any part of the Bluetooth spec that the Wii itself happens not to use. Most notably they only respond to Limited Inquiry Access Code inquries, and they seem to completely ignore Service Discovery Protocol requests. Thanks to the excellent documentation at "Wiibrew":wiibrew, we don't need an SDP response as we already know what kind of data the remote sends. So all we need to do is send out a LIAC inquiry followed by a name request, and start an L2CAP connection to PSM 0x13 of any device referring to itself as a Wii remote. Pairing is also implemented, so wiimote-btstack remembers previously paired remotes and they can reconnect by pressing any button.
+
+Ideally this would be implemented as a driver that can be installed on a Bluetooth adapter, but currently it's a console application which provides named pipes for other software to send and receive data from the remote. An "example implementation is available here":wiiuse as a fork of the wiiuse library.
+
+[wiimote-btstack]https://github.com/simlrh/wiimote-btstack
+[btstack]https://github.com/bluekitchen/btstack
+[wiibrew]http://wiibrew.org/wiki/Wiimote
+[wiiuse]https://github.com/simlrh/wiiuse/tree/btstack

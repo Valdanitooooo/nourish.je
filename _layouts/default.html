@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Steve Le Roy Harris">
+    <meta property="fb:profile_id" content="100006240225479">
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    {% if page.image %}<meta property="og:image" content="{{ site.image_folder }}/{{ page.image }}">{% endif %}
+
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
+    <link rel="stylesheet" href="{{ site.url }}/assets/css/main.css?v=3">
+  </head>
+
+  <body>
+    <header>
+      <div class="ui stackable top fixed menu">
+	<div class="brand item">
+	  <a class="navbar-brand" href="{{ site.url }}/"><img src="{{ site.url }}/assets/images/nourish_logo.svg" alt="{{ site.name }}" title="{{ site.name }}" /></a>
+	</div>
+        <input type="checkbox" class="toggle">
+	<a class="item" href="{{ site.url }}/#">Home</a>
+	<a class="item" href="{{ site.url }}/#about">About</a>
+	<a class="item" href="{{ site.url }}/#case-studies">Case Studies</a>
+	<a class="item" href="{{ site.url }}/#projects">Projects</a>
+	<a class="item" href="{{ site.url }}/#log">Log</a>
+	<a class="item" href="{{ site.url }}/#skills">Skills</a>
+	<a class="item" href="{{ site.url }}/#contact">Contact</a>
+      </div>
+    </header>
+
+    <div class="ui {% if page.container != false %}container{% endif %}">
+      {{ content }}   
+    </div>
+
+    <script defer src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script defer src="{{ site.url }}/assets/js/js.js"></script>
+  </body>
+</html>

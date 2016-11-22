@@ -1,0 +1,248 @@
+---
+title:  "Sparse Peripheral Display for OSVR HDK2"
+description: "A low resolution display to increase the field-of-view of the OSVR HDK consumer VR headset, based on Microsoft research."
+date:   2016-10-30 13:54:00
+tags: [making mondays, vr, osvr, hardware, ftdi]
+categories: [vr, hardware]
+image: sparse/display.jpg
+---
+
+{% include image src="sparse/display.jpg" alt="The final display seen inside the headset" caption="The finished display" %}
+
+Going back to the early days of Oculus Rift DK1 availability, "people have been using LED strips to add a wider field of view to their HMDs":oculight. Inspired by this, along with "Microsoft's recent research into the subject":sparse, I'm adding a <span class="ui header">sparse peripheral display</span> to the OSVR HDK2 that Razer kindly sent me.
+
+Using OSVR has a few advantages over the projects above. The HDK is open hardware, with schematics and 3d models "available on github":osvr-hdk and both internal and external USB ports you can hack with; this allows seamless integration into the hardware. 
+
+The OSVR software is also open source, which allows seamless integration into the software. The Adalight program used by the Oculight samples colors from the operating system's framebuffer, so it doesn't work in direct mode where the framebuffer is bypassed. Microsoft's version requires games to be built with support for their hardware, using light probes in Unity to provide color data. But since OSVR's "RenderManager":rendermanager is open, we have direct access to the game's render buffers, and we can sample colors from that without modifying the game, even if it's running in direct mode.
+
+h2(ui dividing header). Hardware
+
+<div class="ui segment">
+h3. Materials
+
+* 1m 5v 144 LED/m 5050 WS2812 LED strip
+* FT232H breakout board
+* Pull-down resistor
+* 14 way 0.5mm pitch FFC cable
+* 14 pin 0.5mm pitch FFC connector
+* Assorted wires
+
+</div>
+
+h3(ui header). Build
+
+The first step is cutting out and soldering together the LED strip into a shape that'll fit inside the headset. The pattern in the image below fits in snugly. The data channel needs to run in one long line - I have them going bottom left, middle left, top left, center, top right, middle right, bottom right. Note the direction of the arrows on these strips, oriented to make it easier to connect up the output from one strip to the input of the next. 
+
+{% include image src="sparse/leds.jpg" alt="Layout of the LED strip" caption="It's tempting to connect the +5v, GND and Data output from one strip to the next, but this will get very fiddly. Just connect the data out to the next strip, and use jumpers at any point along the parallel strips to connect the 5v and GND rails." %}
+
+Here's the LED strip fitted inside the HMD, and the first prototype driven by an Arduino Uno with all wires running outside the device.
+
+<div class="ui stackable equal width grid">
+{% include image src="sparse/proto1.jpg" alt="LEDS inside the HMD" caption="The LEDs above the nose were removed, as the Microsoft research suggested not using lights between the eyes" %}
+{% include image src="sparse/proto2.jpg" alt="Arduino mounted to the front of the HMD" caption="Powered by an Arduino connected to the external USB" %}
+</div>
+
+<div class="ui negative message" role="alert"><div class="header"><i class="warning sign icon"></i>Be careful with current</div> A full powered LED uses 60mA, and the 80 or so LEDS in this project will use 4.8A, which will damage both the Arduino and the HDK. Only set the LEDs to a very dim brightness.</div>
+
+Research suggested the Arduino wasn't going to be fast enough to run the display. Apart from the RAM and microcontroller limitations, the serial speed would only allow a theoretical maximum 60fps. Not bad but we might as well go for 90fps. The Teensy USB is popular for driving large scale WS2812 projects, but it's a bit pricey, so I settled on the FT232H breakout board. It's not a full microcontroller on it's own but a USB to UART/SPI/I2C/GPIO chip.
+
+WS2812 LEDs don't speak any of those protocols, but "Tony DiCola's NeoPixel-FTDI library":neopixel-ftdi uses an ingenious technique to emulate the WS2812's wacky protocol using SPI which we can copy. The WS2812 expects an 800kHz signal (1.25 microseconds per bit) where a 1 is represented by high voltage for 0.8 microseconds followed by a low voltage for 0.45 microseconds, and a 0 is represented by a high voltage for 0.4 microseconds followed by a low voltage for 0.85 microseconds. 
+
+We're not able to send data this way. However, if we run the SPI protocol eight times faster, at 6.4MHz, then we'll be sending 8 bits - one byte - in the amount of time the WS2812 is expecting 1 bit. And if we send the byte 11111000, the WS2812 will interpret that as a high voltage for 5 * 1.25us / 8 = 0.78 microseconds, followed by a low voltage for 3 * 1.25us / 8 = 0.47 microseconds. Close enough to the expected signal representing a 1. Likewise the byte 11100000 will be interpreted as a 0.
+
+Now we can send data to the display via USB as fast as the LEDs can display it - a theoretical maximum of 10,000fps!
+
+<div class="ui stackable equal width grid">
+{% include image src="sparse/ft232h.jpg" alt="The FT232H board with connector" caption="A connector is soldered to the FTDI board, connecing 5v, GND and SPI out to the LED strip, and a pull down resistor from SPI out to ground" %}
+{% include image src="sparse/internal.jpg" alt="FT232H mounted inside the HDK" caption="Here the FT232H is mounted in the empty space inside the HDK, with wires running internally." %}
+</div>
+
+The next thing to do is tidy up the USB connection, by running from the HDK's interal USB port. This is a 14 pin, 0.5mm ZIF connector labelled J22, at the center bottom of the HDK PCB (it's on the last page of "the HDK schematics":schematic). Pins 14 & 13 are 5v (connect both as the cables can typically only carry 0.5A). Pin 12 is USB2 D-, pin 11 is D+, and 10, 7 & 4 connect to ground. You can solder this directly to the FTDI board, but I wanted flexibility so I made a ZIF connector to USB adapter using a home-etched PCB.
+
+<div class="ui stackable equal width grid">
+{% include image src="sparse/usb.jpg" alt="The internal USB connection" caption="The internal USB connector" %}
+<div class="column">
+  <a href="{{ site.image_folder }}/sparse/pcb.jpg" alt="Spare etched PCBs"><img class="ui rounded image" src="{{ site.image_folder }}/sparse/pcb.jpg" alt="Spare etched PCBs" /></a>
+  {% include image src="sparse/adapter.jpg" alt="The ZIF to USB adapter" caption="The ZIF-to-USB adapter (bottom) and spare etched PCBs (top)" %}
+  </div>
+</div>
+
+The adapter takes up a lot of space, so you might want to make something smaller. Since I use my own "Kinect-based positional tracking":osvr-kinect instead of the HDK's IR tracking, I just removed the IR controller board to make room.
+
+Finally, some semi-opaque polypropylene is cut to cover the LEDs and diffuse the bright light a little.
+
+<div class="ui stackable equal width grid">
+{% include image src="sparse/final.jpg" alt="The finished HMD" caption="The finished HMD with all the electronics now internal" %}
+{% include image src="sparse/display.jpg" alt="The finished display seen through the viewer" caption="The finished display with polypropylene diffuser" %}
+</div>
+
+h2(ui dividing header). Software <div class="sub header">Work in progress</div>
+
+h3. Display driver
+
+Software can be written in Python using the "Adafruit NeoPixel FTDI library":neopixel-ftdi. As we want to integrate into OSVR-RenderManager, we need to use C++. We'll do this using the API provided by FTDI for the FT232H chip, libMPSSE. Below is a C++ header providing data structures which automatically convert between 8-bit integers and 8-bytes values we can send over SPI.
+
+&nbsp;
+
+<figure>
+<figcaption class="figure-caption">Listing 1: ws2812.h - C++ data structures for dealing with WS2812 over 6.4MHz SPI</figcaption>
+<div class="ui segment">
+{% highlight c++ %}
+#include <cstdint>
+
+#define WS2812_ZERO  0xE0
+#define WS2812_ONE   0xF8
+#define WS2812_LATCH 0x00
+
+#define WS2812_MAX_BRIGHTNESS 0xFF
+
+struct ws2812_byte {
+	uint8_t bytes[8];
+
+	ws2812_byte(){
+		for (int i = 0; i < 8; i++) {
+			bytes[i] = 0;
+		}
+	}
+	ws2812_byte(uint8_t byte) {
+		for (int i = 0; i < 8; i++) {
+			bytes[i] = ((byte >> (7 - i)) & 0x01) ? WS2812_ONE : WS2812_ZERO;
+		}
+	}
+	operator uint8_t() const {
+		uint8_t ret = 0;
+		for (int i = 0; i < 8; i++) {
+			ret = (ret << 1) + (bytes[i] == WS2812_ONE ? 1 : 0);
+		}
+	}
+}; 
+
+struct ws2812_color_rgb {
+	ws2812_byte red;
+	ws2812_byte green;
+	ws2812_byte blue;
+
+	ws2812_color_rgb() {}
+	ws2812_color_rgb(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness = WS2812_MAX_BRIGHTNESS) {
+		red = r * brightness / WS2812_MAX_BRIGHTNESS;
+		green = g * brightness / WS2812_MAX_BRIGHTNESS;
+		blue = b * brightness / WS2812_MAX_BRIGHTNESS;
+	}
+};
+
+struct ws2812_color_grb {
+	ws2812_byte green;
+	ws2812_byte red;
+	ws2812_byte blue;
+
+	ws2812_color_grb() {}
+	ws2812_color_grb(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness = WS2812_MAX_BRIGHTNESS) {
+		red = r * brightness / WS2812_MAX_BRIGHTNESS;
+		green = g * brightness / WS2812_MAX_BRIGHTNESS;
+		blue = b * brightness / WS2812_MAX_BRIGHTNESS;
+	}
+};
+{% endhighlight %}
+</div>
+</figure>
+
+Here's an example usage, filling two buffers with RGB data and sending them over the SPI channel. The display will flash back and forth between red and blue.
+
+&nbsp;
+
+<figure>
+<figcaption class="figure-caption">Listing 2: Example usage</figcaption>
+<div class="ui segment">
+{% highlight c++ %}
+#include "ws2812.h"
+
+#define NUM_LEDS 76
+#define MAX_BRIGHTNESS 10
+
+#define APP_CHECK_STATUS(exp) {if(exp!=FT_OK){printf("%s:%d:%s(): status(0x%x) \
+!= FT_OK\n",__FILE__, __LINE__, __FUNCTION__,exp);system("pause");exit(1);}else{;}};
+
+int main(int argc, char* argv[])
+{
+	ws2812_color_grb redBuffer[NUM_LEDS];
+	ws2812_color_grb blueBuffer[NUM_LEDS];
+
+	for (int i = 0; i < NUM_LEDS; i++) {
+		redBuffer[i] = { 255, 0, 0, MAX_BRIGHTNESS };
+		blueBuffer[i] = { 0, 0, 255, MAX_BRIGHTNESS };
+	}
+
+	FT_HANDLE ftHandle;
+	FT_STATUS status = FT_OK;
+	FT_DEVICE_LIST_INFO_NODE devList = { 0 };
+	ChannelConfig channelConf = { 0 };
+	uint32 channels = 0;
+	uint8 latency = 255;
+	uint32 written = 0;
+
+	channelConf.ClockRate = 6400000;
+	channelConf.LatencyTimer = latency;
+	channelConf.configOptions = SPI_CONFIG_OPTION_MODE0;
+	channelConf.Pin = 0x00000000;
+
+#ifdef _MSC_VER
+	Init_libMPSSE();
+#endif
+
+	status = SPI_GetNumChannels(&channels);
+	APP_CHECK_STATUS(status);
+
+	printf("Number of available SPI channels = %d\n", (int)channels);
+
+	if (channels>0)
+	{
+		/* Open the first available channel */
+		status = SPI_OpenChannel(0, &ftHandle);
+		APP_CHECK_STATUS(status);
+
+		printf("\nhandle=0x%x status=0x%x\n", (unsigned int)ftHandle, status);
+		status = SPI_InitChannel(ftHandle, &channelConf);
+		APP_CHECK_STATUS(status);
+
+		for (int i = 0;;i++) {
+			if (i % 2) {
+				status = SPI_Write(ftHandle, (uint8 *)redBuffer, sizeof(redBuffer), &written, SPI_TRANSFER_OPTIONS_SIZE_IN_BYTES);
+				Sleep(1000);
+			}
+			else {
+				status = SPI_Write(ftHandle, (uint8 *)blueBuffer, sizeof(blueBuffer), &written, SPI_TRANSFER_OPTIONS_SIZE_IN_BYTES);
+				Sleep(1000);
+			}
+			APP_CHECK_STATUS(status);
+			if (i > 1000000) i = 0;
+		}
+
+		status = SPI_CloseChannel(ftHandle);	
+		APP_CHECK_STATUS(status);
+	}
+
+#ifdef _MSC_VER
+	Cleanup_libMPSSE();
+#endif
+
+	system("pause");
+
+	return 0;
+}
+{% endhighlight %}
+</div>
+</figure>
+
+h3. RenderManager integration
+
+RenderManager integration is to be completed but will work as follows: the positions of the LEDs in the user field of view will be specified in the rendermanager config json file. These will be fed into a GPU program as locations in the render buffer to sample colors from. The resulting array of colors is transferred back to the CPU and sent to the display.
+
+One version of the GPU program will need to be written for each shader language, Direct3d and OpenGL. The OpenGL version could be written as an old-school GPGPU vertex shader for compatiblity reasons (macOS doesn't support OpenGL 4.3 yet), but will probably be implemented as a compute shader.
+
+[oculight]http://hackaday.com/2013/04/11/hacking-the-oculus-rift-the-oculight/
+[sparse]http://research.microsoft.com/en-us/um/people/benko/publications/2016/SparsePeriphery_CHI2016.pdf
+[osvr-hdk]https://github.com/OSVR/OSVR-HDK
+[rendermanager]https://github.com/sensics/OSVR-RenderManager
+[neopixel-ftdi]https://github.com/tdicola/Adafruit_NeoPixel_FTDI
+[schematic]https://github.com/OSVR/OSVR-HDK/blob/master/HDK%20Ver.%202.0/electronics/schematics/HDK%202.0%20.pdf
+[osvr-kinect]https://github.com/simlrh/OSVR-Kinect

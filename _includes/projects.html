@@ -1,0 +1,25 @@
+{% assign project = include.post %}
+<div class="event">
+  <div class="label">
+    <i class="configure icon"></i>
+  </div>
+  <div class="content">
+    <div class="date">
+      {{ project.date | date_to_string }}
+    </div>
+    <div class="summary">Posted a project: <a href="{{ project.url | remove_index }}">{{ project.title }}</a></div>
+    {% if include.excerpt != true %}
+    <div class="extra ui items">
+      <div class="item">
+        <div class="ui small image">
+          <img alt="{{ project.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ project.image }}" />
+        </div>
+        <div class="content">
+          <div class="description">{{ project.description }}</div>
+          <div class="meta"><i class="tags icon"></i> {% for tag in project.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,122 @@
+---
+title:  "Making a VR Joystick with OSVR-firmata"
+description: 'OSVR-firmata makes it easy to build OSVR compatible controllers with Arduino or Sparks boards. This tutorial works through making a simple joystick.'
+date:   2016-11-11 14:09:00
+tags: [OSVR, vr, arduino, hardware]
+categories: [hardware]
+image: firmata/wiring.png
+excerpt: "What's really exciting about OSVR, the open source virtual reality platform supported by Sensics and Razer, is the potential for individuals hacking in their sheds and workshops to create hardware and software that works with the VR games they already own.<br><br>
+
+Arduino makes open source hardware quick to prototype and easy to build, and the firmata protocol makes communication between an Arduino and connected PC simpler. OSVR-firmata was written to connect Arduino or Sparks boards running the firmata firmware into OSVR. Off-the-shelf, the plugin provides the Arduino's digital and analog inputs as OSVR button and analog interfaces; or it can be forked to use custom logic or connect to I2C or serial devices.<br><br>
+
+This tutorial uses the off-the-shelf version to a simple gamepad consisting of a two-axis joystick and button, without writing a single line of code."
+---
+
+<div class="ui stackable equal width grid">
+  <div class="ten wide column">
+
+What's really exciting about "OSVR":osvr, the open source virtual reality platform supported by "Sensics":sensics and "Razer":razer, is the potential for individuals hacking in their sheds and workshops to create hardware and software that works with the VR games they already own.
+
+"Arduino":arduino makes open source hardware quick to prototype and easy to build, and the "firmata":firmata protocol makes communication between an Arduino and connected PC simpler. "OSVR-firmata":osvr-firmata was written to connect Arduino or Sparks boards running the firmata firmware into OSVR. Off-the-shelf, the plugin provides the Arduino's digital and analog inputs as OSVR button and analog interfaces; or it can be forked to use custom logic or connect to I2C or serial devices.
+
+This tutorial uses the off-the-shelf version to a simple gamepad consisting of a two-axis joystick and button, without writing a single line of code.
+
+  </div>
+  {% include image src="firmata/joystick.jpg" alt="Joystick with push button" caption="This thumbstick comes with an integrated button and is cheap to buy on eBay." %}
+</div>
+
+
+h1(ui dividing header). Wiring
+
+The joystick module is cheaply available on eBay, or can be bought from Sparkfun ("joystick":sparkfun-joystick & "breakout board":sparkfun-breakout). It's really just two potentiometers for the X and Y-axes and a momentary push button, so the wiring is simple: VCC to the Arduino's 5V, GND to GND, X-axis to analog 0, Y-axis to A1, Switch to digital pin 2, and a resistor between pin 2 and ground so the voltage is pulled down to zero when not pressed.
+
+{% include image src="firmata/wiring.png" alt="Joystick wiring diagram" caption="Joystick wiring diagram" %}
+
+<div class="ui stackable equal width grid">
+{% include image src="firmata/wiring.jpg" alt="Photo of the completed circuit" caption="The finished circuit" %}
+<div class="column">
+
+On some joysticks the push button might be momentary-off rather than momentary-on. This will mean the resistor need to connect pin 2 to 5v instead, and OSVR will receive a "pushed" signal when the button is released and vice versa. Fixing this either in hardware or software is an exercise left for the reader.
+
+</div>
+</div>
+
+h1(ui dividing header). The Arduino sketch
+
+<div class="ui stackable equal width grid">
+<div class="ten wide column">
+
+Firmata is a protocol for communication and control between devices. StandardFirmata is an Arduino sketch which implements the protocol, allowing a connected PC access to control the outputs and read the inputs without writing any Arduino side code. It comes included with the Arduino IDE.
+
+Open up the IDE and select File > Examples > Firmata > StandardFirmata. Select your board type and port number under Tools and click the Upload button to program the Arduino.
+
+That's it for the Arduino!
+
+</div>
+
+{% include image src="firmata/arduino.png" alt="The Arduino IDE" caption="StandardFirmata firmware in the Arduino IDE" %}
+</div>
+
+<div class="ui stackable equal width grid">
+<div class="ten wide column">
+
+h2. Testing StandardFirmata
+
+You can quickly test the circuit using the "firmata test program":firmata-test.
+
+Run firmata-test and select the serial port. If everything succeeded, the window will fill up with the Arduino digital and analog pins. Move the joystick up and down, back and forth, and you should see the values for A0 and A1 range from 0 to 1024, resting at around 500 when you let go.
+
+Set pin 2 to input and it should change from *Low* to *High* as you click the button.
+
+If it isn't working as described, check the wiring is firmly connected.
+
+</div>
+{% include image src="firmata/test.png" alt="Firmata test program" caption="firmata-test.exe" %}
+</div>
+
+h1(ui dividing header). OSVR config
+
+Download "the latest release of OSVR-firmata":firmata-releases and drop the dll into the `bin/osvr-plugins-0` folder. Start up osvr_server and you should see output similar to the below:
+
+{% include image src="firmata/osvr.png" alt="OSVR server output" caption="OSVR server output" %}
+
+The plugin searches through each serial port looking for a device running StandardFirmata. At least one serial port should give you the message "Found StandardFirmata.ino-X.Y" (X.Y depends on the firmware version).
+
+Now the Arduino is recognised, you just need to set up your OSVR aliases in osvr_server_config.json:
+
+<figure>
+<figcaption>Listing 1: osvr_server_config.json</figcaption>
+<script src="https://gist.github.com/simlrh/7ccad6ab041b8e98fc7b13f96877606f.js"></script>
+</figure>
+
+Making sure to use the device name reported by OSVR server - "/je_nourish_firmata/StandardFirmata.ino-2.5" in the console output above.
+
+Restart osvr_server and your joystick is complete!
+
+h1(ui dividing header). Next steps
+
+Now, what can you actually do with your joystick?
+
+You can use "Hydra-OSVR":hydra-osvr to play SteamVR games using OSVR controllers, like the one you've just built. You can run the SteamVR tutorial and beam with pride as you complete the "touchpad" section using your homemade joystick. Not bad for a few minutes fiddling with wires.
+
+But you won't get much further, because your controller doesn't report its position or location! The next tutorial in this series will cover forking and modifying the OSVR-firmata plugin, customising the business logic in order to:
+
+* Emulate a position tracker
+* Autodetect only our hardware, rather than all firmata devices
+* Send feedback to the Arduino
+
+All using the hardware we build in this tutorial.
+
+A third and final tutorial will cover advanced usage; we'll upgrade the hardware to include a full IMU for real orientation tracking!
+
+[osvr]http://www.osvr.org/
+[sensics]http://sensics.com/
+[razer]http://www.razerzone.com/
+[arduino]https://www.arduino.cc/
+[firmata]https://github.com/firmata/protocol
+[osvr-firmata]https://github.com/simlrh/OSVR-firmata
+[sparkfun-joystick]https://www.sparkfun.com/products/9032
+[sparkfun-breakout]https://www.sparkfun.com/products/9110
+[firmata-test]http://www.firmata.org/wiki/Main_Page#Firmata_Test_Program
+[firmata-releases]https://github.com/simlrh/OSVR-firmata/releases
+[hydra-osvr]https://github.com/simlrh/Hydra-OSVR

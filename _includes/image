@@ -1,0 +1,1 @@
+<figure class="column"><a href="{{ site.image_folder }}/{{ include.src }}"><img class="ui rounded image" src="{{ site.image_folder }}/{{ include.src }}" alt="{{ include.alt }}"></a>{% if include.caption %}<figcaption class="figure-caption">{{ include.caption }}</figcaption>{% endif %}</figure>

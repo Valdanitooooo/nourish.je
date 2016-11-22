@@ -1,0 +1,13 @@
+---
+layout: sidebar
+title: 404 Not Found
+permalink: "/404.html"
+---
+
+<div class="ui huge header">
+There's no page at this address. Sorry about that. Maybe there used to be and it's gone now. Wow, that would be such bad organisation. 
+
+I'm so, so sorry.
+<a class="ui huge header"><a href="/">This link will definitely take you somewhere.</a>
+</div>
+

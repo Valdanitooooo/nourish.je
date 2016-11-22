@@ -1,0 +1,47 @@
+---
+title:  "Collimating filter for PCB UV exposure box"
+description: "Improve the resolution of photoresist PCBs using collimated (parallel) light rays. This filter fits cheap UV nail lamps available on eBay."
+date:   2016-11-20 18:19:48
+tags: [making mondays, 3d printing, pcb]
+categories: [3d printing]
+image: collimator/filter.jpg
+---
+
+<div class="ui buttons download-buttons">
+  "(ui primary button). Download OpenSCAD file":scad-file
+  "(ui primary button). View on GitHub":github-link
+</div>
+
+&nbsp;
+
+<div class="ui stackable equal width grid">
+<div class="column">
+If you make home etched PCBs using dry film photoresist, your exposure setup might benefit from a <span class="ui header">"collimating filter":github-link</span>. If light is coming at your PCB from all angles, some rays will find their way under the traces on the transparency. Making sure the majority of the light rays are coming from directly above can mitigate this problem and increase resolution.
+
+This filter is designed to slot into the kind of "cheap UV nail polish dryer available on eBay":ebay-link.
+</div>
+{% include image src="collimator/filter.jpg" alt="Collimating filter" caption="The collimating filter" %}
+</div>
+
+h2(ui dividing header). Printing
+
+There are three STL files in "the GitHub repo":github-link. @filter.stl@ is the basic CAD design with no thought put into optimising printing. @r1dfilter.stl@ is sized to fit the build plate of my printer (a Replicator clone), with wall widths optimised so they only require one pass with the print head. *However, I recommend you use @fillerfilter.stl@*.
+
+@fillerfilter.stl@ is a plain cube with the mounting grooves cut out, but no honeycomb. Load this into "slic3r":slic3r, set infill to 10% honeycomb and set number of horizontal shells to zero. This way slic3r generates the honeycomb structure itself instead of trying to find a path through a honeycomb you provide. It's much quicker to slice and to print. The print ends up a bit messier (the slicer thinks it's doing infill), but it works exactly the same.
+
+h2(ui dividing header). Usage
+
+Slot the filter into the UV source in place of the normal removable bottom. Place above your PCB and expose as normal.
+<div class="ui stackable equal width grid">
+{% include image src="collimator/uvfilter.jpg" alt="Filter with UV source" caption="The filter with the UV source" %}
+<div class="six wide column">
+{% include image src="collimator/fitted.jpg" alt="Filter fitted into the UV source" caption="The filter fitted into the nail drying box" %}
+</div>
+</div>
+
+{% include image src="collimator/working.jpg" alt="The working exposure setup" caption="The working exposure setup" %}
+
+[scad-file]https://raw.githubusercontent.com/simlrh/collimating-filter/master/filter.scad
+[github-link]https://github.com/simlrh/collimating-filter
+[ebay-link]http://www.ebay.co.uk/sch/i.html?Type=UV%2520Lamps&_sacat=47945&_nkw=uv%20nail%20lamp&_dcat=67653
+[slic3r]http://slic3r.org/

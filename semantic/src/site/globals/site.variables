@@ -1,0 +1,9 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@fontSize: 16px;
+@primaryColor: #73b824;
+@green: @primaryColor;
+@linkColor: @primaryColor;
+@importGoogleFonts : false;

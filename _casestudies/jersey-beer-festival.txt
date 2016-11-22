@@ -1,0 +1,9 @@
+---
+title: Jersey Beer Festival
+image: jbp.jpg
+tags: [iOS, Objective C, Python, App engine, Meteor, Angular]
+date: 2016-09-22 12:42:00
+link: http://beers.jerseybeerfestival.org/
+---
+
+This app lets festival-goers plan their orders and rate their favourite beers at the Jersey Beer Festival. Previously an iOS app backed by django-nonrel, in 2016 we moved to Meteor/Angular/Ionic for cross platform support.

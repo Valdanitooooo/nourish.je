@@ -1,0 +1,8 @@
+---
+title: TurfCaddy
+image: turfcaddy.jpg
+tags: [Android, PHP, iOS, Web service]
+date: 2013-07-12 16:55:00
+---
+
+TurfCaddy is a tech startup disrupting the exciting field of golf course maintenance. Working from the prototype iOS app I created the web service and website, as well as porting the app to Android, all making extensive use of Google Maps integration.

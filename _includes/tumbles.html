@@ -1,0 +1,21 @@
+{% assign tumble = include.post %}
+<div class="event">
+  <div class="label"><i class="write icon"></i></div>
+  <div class="content">
+    <div class="date">
+      {{ tumble.date | date_to_string }}
+    </div>
+    {% if include.excerpt %}
+      <div class="summary">
+        <a href="{{ tumble.url | remove_index }}">{{ tumble.title }}</a>
+      </div>
+    {% else %}
+      <div class="summary">
+        {{ tumble.title }} <a href="{{ tumble.url | remove_index }}"><i class="linkify small icon"></i></a>
+      </div>
+      <div class="extra">
+        {{ tumble.content }}
+      </div>
+    {% endif %}
+  </div>
+</div>

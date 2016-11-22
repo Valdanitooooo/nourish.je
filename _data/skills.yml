@@ -1,0 +1,38 @@
+- name: Frontend Web
+  description: 7 years experience as a frontend developer
+  skills:
+    - name: HTML
+      description: Semantic markup including HTML5
+
+    - name: CSS
+      description: Including SASS and CSS3
+     
+    - name: JavaScript
+      description: Including AngularJS, Backbone.js, jQuery and Canvas animation with Easel.js
+
+    - name: Workflow
+      description: "TDD with karma, jasmine and PHPUnit; Grunt, Vagrant, docker, git"
+      
+- name: Backend Web
+  description: 7 years experience as a backend developer
+  skills:
+    - name: PHP &amp; SQL
+      description: Daily, including Drupal and Wordpress development, both plugins and themes
+
+    - name: Python
+      description: Django &amp; django-nonrel on Google App Engine
+
+    - name: Server administration
+      description: Apache, XCache, GAE, AWS, DNS management &amp; email hosting
+
+- name: Native apps
+  description: Several projects over recent years
+  skills:
+    - name: Objective C &amp; the iOS SDK
+      description: Apps available in the App Store
+
+    - name: Java &amp; the Android SDK
+      description: Including porting an iOS app to Android &amp; Kindle Fire
+
+    - name: C/C++
+      description: Personal projects including VR apps and driver development on Windows and Linux

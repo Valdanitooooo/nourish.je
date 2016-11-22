@@ -1,0 +1,9 @@
+---
+title: Shaun Rankin
+image: sr.jpg
+tags: [Wordpress, PHP, Responsive, Retina]
+date: 2014-08-02 10:22:00
+link: http://www.shaunrankin.com
+---
+
+An example of the many PSD/Illustrator to Wordpress themes I've coded over the years. Includes a responsive image slider, SVG logos and icons and a three column layout targeted at phone, tablet and desktop.

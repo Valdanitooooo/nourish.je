@@ -1,0 +1,8 @@
+---
+title: Maillards & Voisin Hunter
+image: casestudies/maillards.jpg
+tags: [DezRez, XML, API, Wordpress, XSLT]
+date: 2016-11-01 13:27:00
+link: http://www.maillards.je/
+---
+The sales and lettings property searches on the Maillards and Voisin Hunter websites are powered by an XML API, provided by a popular real estate management platform.

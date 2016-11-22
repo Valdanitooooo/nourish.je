@@ -1,0 +1,23 @@
+{% assign casestudy = include.post %}
+<div class="event">
+  <div class="label"><i class="image icon"></i></div>
+  <div class="content">
+    <div class="date">
+      {{ casestudy.date | date_to_string }}
+    </div>
+    <div class="summary">Posted a <a href="/case-studies/">case study</a></div>
+    {% if include.excerpt != true %}
+    <div class="extra ui items">
+        <div class="item">
+          <div class="ui tiny image">
+            <img alt="{{ casestudy.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ casestudy.image }}" />
+          </div>
+          <div class="content">
+            <div class="ui small header">{{ casestudy.title }}</div>
+            <div class="description">{{ casestudy.content }}</div>
+          </div>
+        </div>
+    </div>
+    {% endif %}
+  </div>
+</div>

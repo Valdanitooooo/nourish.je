@@ -1,0 +1,51 @@
+--- 
+name: nourish
+email: steve@nourish.je
+highlighter: rouge
+image_folder: /assets/images
+markdown: redcarpet
+timezone: Europe/London
+upload_folder: /assets/uploads
+gems: 
+  - jekyll-textile-converter
+exclude: 
+  - node_modules
+  - bower_components
+  - src
+  - package.json
+  - Gruntfile.js
+  - bower.json
+  - s3_website.yml
+  - semantic
+excerpt_separator: <!--more-->
+collections: 
+  articles:
+    output: true
+    permalink: "/:path/index.html"
+  casestudies:
+    output: false
+  projects: 
+    output: true
+    permalink: "/:collection/:path/index.html"
+  tumbles:
+    output: true
+    permalink: "/:collection/:path/index.html"
+defaults: 
+  - 
+    scope: 
+      path: ""
+      type: tumbles
+    values: 
+      layout: post
+  - 
+    scope: 
+      path: ""
+      type: projects
+    values: 
+      layout: project
+  -
+    scope:
+      path: ""
+      type: articles
+    values:
+      layout: post

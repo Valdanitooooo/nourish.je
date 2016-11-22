@@ -1,0 +1,25 @@
+{% assign article = include.post %}
+<div class="event">
+  <div class="label">
+    <i class="newspaper icon"></i>
+  </div>
+  <div class="content">
+    <div class="date">
+      {{ article.date | date_to_string }}
+    </div>
+    <div class="summary">Posted an article: <a href="{{ article.url | remove_index }}">{{ article.title }}</a></div>
+    {% if include.excerpt != true %}
+    <div class="extra ui items">
+      <div class="item">
+        <div class="ui small image">
+          <img alt="{{ article.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ article.image }}" />
+        </div>
+        <div class="content">
+          <div class="description">{{ article.description }}</div>
+          <div class="meta"><i class="tags icon"></i> {% for tag in article.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>

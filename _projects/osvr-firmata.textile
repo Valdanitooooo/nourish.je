@@ -1,0 +1,21 @@
+---
+title:  "OSVR-firmata (and firmatacpp)"
+description: 'An OSVR plugin to report the analog and digital inputs of a connected Arduino running the StandardFirmata firmware.'
+date:   2016-11-08 19:14:37
+tags: [OSVR, vr, arduino, hardware]
+categories: [hardware]
+image: arduino.jpg
+---
+
+<span class="ui header">"OSVR-firmata":osvr-firmata</span> is an OSVR plugin intended to make it easier to build OSVR compatible gamepads and motion controller using Arduino or Sparks boards. By default the plugin provides access to the digital and analog inputs of the board as button and analog interfaces in OSVR, with no need to write any code. Or you can fork the plugin and add code to perform calculations on the input, send output, request data from I2C or serial devices like accelerometers - this still only requires code to be written for the PC. The microcontroller always uses the StandardFirmata firmware.
+
+OSVR-firmata depends on <span class="ui header">"firmatacpp":firmatacpp</span>, an implementation of the "firmata protocol":firmata in C++.
+
+"Click here for a tutorial":tutorial on how to build an OSVR compatible joystick using OSVR-firmata.
+
+<figure><img class="ui rounded image" src="{{ site.image_folder }}/arduino.jpg" alt="Arduino Uno" /><figcaption><a href="https://www.flickr.com/photos/snootlab/6052455554/">Arduino Uno</a> image by Snootlab <i class="creative commons icon"></i></figcaption></figure>
+
+[osvr-firmata]https://github.com/simlrh/OSVR-firmata
+[firmatacpp]https://github.com/simlrh/firmatacpp
+[firmata]https://github.com/firmata/protocol
+[tutorial]/making-a-vr-joystick-with-osvr-firmata/

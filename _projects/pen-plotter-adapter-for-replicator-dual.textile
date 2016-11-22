@@ -1,0 +1,95 @@
+---
+title:  "Pen plotter adapter for Replicator 3d printer (and clones)"
+description: "Pen adapter to fit the carriage of a Replicator Dual (or clone) in place of the extruders. Can take 2 pens or pencils for ditto drawing."
+date:   2016-01-19 20:56:00
+tags: [making mondays, 3d printing]
+categories: [3d printing]
+image: plottersvgs.jpg
+---
+
+<div class="ui buttons download-buttons">
+  "(ui primary button). Download OpenSCAD file":{{ site.upload_folder }}/penholder.scad
+  "(ui primary button). Download STL file":{{ site.upload_folder }}/penholder.stl
+  "(ui blue button). View on Thingiverse":http://www.thingiverse.com/thing:1279475
+</div>
+
+&nbsp;
+
+<div class="ui stackable equal width grid">
+<div class="row">
+{% include image src="plotter.jpg" alt="Pen plotter" caption="The pen plotter" %}
+<div class="column">
+h3. Instructions
+
+Fit a pen or pencil into the holder using one of the spare bolts that came with the Replicator. It should protrude about the same amount as the extruder head does (about 27mm on my machine).
+
+Remove the extruder heads and replace them with the pen adapter, securing the adapter using the same bolts. Make sure the vertical wall will make contact with the X-axis endstop to prevent the stepper motor over running.
+
+Level the build plate again to ensure the pen doesn't scratch the build plate. Instead of checking that the paper slides between the pen and the plate just make sure it's leaving a good mark.
+
+To create gcode to print from, you can import an SVG file into Blender, extrude the curves to 0.1mm, then export to STL and slice using a 0.1mm layer height. Or, use the Inkscape > OpenSCAD extension to do something similar.
+
+You can also generate your own gcode; eg "G1 X0 Y0" to move to 0mm, 0mm (the center of the build platform), "G1 Z2" to lift the pen 2mm off the page, "G1 Z0" to press it into the paper. You can vary the pen pressure by controlling the Z height to create shading - the example photograph was made using this method (see the python script below).
+
+&nbsp;
+</div>
+</div>
+</div>
+
+{% include image src="plottersvgs.jpg" alt="SVG images plotted with the pen plotter" caption="SVGs plotted in pencil and ballpoint pen" %}
+
+h3. Example gcode generation
+
+Simple example - this could be greatly improved by scanning left-to-right then right-to-left instead of returning to the left side every line. It also horizontally flips the image.
+
+<figure><figcaption class="figure-caption">Usage: python jpeg2gcode.py image.jpg</figcaption>
+<div class="ui segment">
+{% highlight python %}
+import sys
+from PIL import Image
+
+brightness_threshold = 0.05
+
+stroke_width = 0.5
+
+build_x = 150
+build_y = 100
+
+z_lift = 2
+z_medium = -0.5
+z_scale = 0.75
+
+image = Image.open(sys.argv[1])
+rgb_image = image.convert('RGB')
+
+x1, y1, x2, y2 = image.getbbox()
+
+x_scale = build_x / (x2-x1)
+y_scale = build_y / (y2-y1)
+
+scale = min(x_scale, y_scale)
+
+for y in range(y1, y2, int(stroke_width / scale)):
+    head_y = (((y1-y2)/2)+y)*scale
+    head_x = ((x1-x2)/2)*scale
+    print("G0 Z{}".format(z_lift))
+    print("G0 X{} Y{}".format(head_x, head_y))
+    print("G1 Z{}".format(z_medium + z_scale/2))
+    brightness = 1
+    for x in range(x1, x2, int(stroke_width / scale)):
+        r, g, b = rgb_image.getpixel((x, y))
+        new_brightness = (0.2126*r + 0.7152*g + 0.0722*b) / 255
+        if (abs(new_brightness - brightness) > brightness_threshold):
+            brightness = new_brightness
+            head_x = (((x1-x2)/2)+x)*scale
+            head_z = z_medium - z_scale/2 + z_scale*brightness
+            print("G1 X{}".format(head_x))
+            print("G1 Z{}".format(head_z))
+    head_x = ((x2-x1)/2)*scale
+    print("G1 X{} Y{}".format(head_x, head_y))
+
+{% endhighlight %}
+</div>
+</figure>
+{% include image src="plotterjpg.jpg" alt="JPG image plotted with the pen plotter" caption="JPG image plotted with the pen plotter" %}
+

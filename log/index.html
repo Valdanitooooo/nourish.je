@@ -1,0 +1,28 @@
+---
+layout: sidebar
+title: Log
+description: "A feed of everything on the site."
+paginate:
+  collection: 
+    - articles
+    - casestudies
+    - projects
+    - tumbles
+  title_suffix: ''
+---
+A feed of everything on the site.
+
+<div class="ui large feed">
+  {% for post in page.posts %}
+    {% include {{ post.collection }}.html post=post %}
+  {% endfor %}
+</div>
+
+<div class="ui divider"></div>
+
+{% if page.previous %}
+<div style="float:left"><a href="{{ page.previous.url }}">← Page {{ page.paginate.page_num | minus: 1}}</a></div>
+{% endif %}
+{% if page.next%}
+<div style="float:right"><a href="{{ page.next.url }}">Page {{ page.paginate.page_num | plus: 1 }} →</a></div>
+{% endif %}

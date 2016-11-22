@@ -1,0 +1,32 @@
+/*******************************
+         Site Overrides
+*******************************/
+.ui.menu .toggle:before {
+  content:"☰";
+  display:block;
+  font-size:2em;
+}
+.ui.menu .toggle { 
+  position:absolute;
+  top:0;
+  right:0;
+  display:none;
+  border:none;
+  background:none;
+  width:75px;
+  height:75px;
+  line-height:75px;
+  -webkit-appearance:none;
+  text-align:center;
+}
+@media only screen and (max-width: @largestMobileScreen) {
+  .ui.menu .toggle { 
+    display:block;
+  }
+  .ui.menu .toggle:not(:checked) ~ .item {
+    display:none;
+  }
+  .ui.menu .toggle:checked ~ .item {
+    display:block;
+  }
+}

@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<div class="ui stackable grid">
+  <div class="eleven wide column">
+    <h1 class="ui dividing header">{{ page.title }}{% if page.description != null %}<div class="sub header">{{ page.description }}</div>{% endif %}</h1>
+    {{ content }}
+  </div>
+  <div class="five wide column">
+    {% include sidebar.html %}
+  </div>
+</div>

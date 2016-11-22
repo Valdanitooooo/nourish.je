@@ -1,0 +1,7 @@
+---
+title: "A quick and dirty Jekyll plugin to remove 'index.html' from the end of urls when using a clean permalink scheme"
+date:   2016-11-08 17:27:32
+tags: [jekyll, ruby]
+categories: [programming]
+---
+<script src="https://gist.github.com/simlrh/a7df4d48da837e23299cdfdd133540f3.js"></script>

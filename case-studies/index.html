@@ -1,0 +1,35 @@
+---
+layout: sidebar
+title: Case Studies
+description: "A selection of work done for clients."
+paginate:
+  collection: casestudies
+  title_suffix: ''
+---
+A selection of work done for clients.
+
+<div class="ui divided items">
+  {% for casestudy in page.casestudies %}
+  <a class="item" {% if casestudy.link != null %}href="{{ casestudy.link }}"{% endif %}>
+    <div class="ui medium image">
+      <img alt="{{ casestudy.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ casestudy.image }}" />
+    </div>
+    <div class="content">
+      <div class="header">{{ casestudy.title }}</div>
+      <div class="meta">{% for tag in casestudy.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</div>
+      <div class="description">{{ casestudy.content }}</div>
+      <div class="extra">
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="ui divider"></div>
+
+{% if page.previous %}
+<div style="float:left"><a href="{{ page.previous.url }}">← Page {{ page.paginate.page_num | minus: 1}}</a></div>
+{% endif %}
+{% if page.next%}
+<div style="float:right"><a href="{{ page.next.url }}">Page {{ page.paginate.page_num | plus: 1 }} →</a></div>
+{% endif %}

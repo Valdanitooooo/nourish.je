@@ -1,0 +1,7 @@
+{
+  "name": "nourish",
+  "version": "1.0.0",
+  "devDependencies": {
+    "pygments": "~2.0.2"
+  }
+}

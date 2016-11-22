@@ -1,0 +1,15 @@
+---
+layout: sidebar
+---
+<article class="post">
+{{ content }}
+</article>
+
+<div class="ui section divider"></div>
+
+{% if page.previous %}
+<div style="float:left"><a href="{{ page.previous.url | remove_index  }}">← {{ page.previous.title }}</a></div>
+{% endif %}
+{% if page.next %}
+<div style="float:right"><a href="{{ page.next.url | remove_index }}">{{ page.next.title }} →</a></div>
+{% endif %}
