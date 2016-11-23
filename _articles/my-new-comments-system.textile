@@ -170,7 +170,7 @@ If you use jekyll-github-comments on your own site please let me know... *__in t
   {% response author="Steve" email="steve@nourish.je" date="2016-11-23 20:04:32" %}
     Well, I've written a whole post about it. I'd better submit a comment through a pull request to check it actually works!
     {% responses %}
-      {% response author="Steve" email="steve@nourish.je" date="2016-11-23 20:07:14 %}
+      {% response author="Steve" email="steve@nourish.je" date="2016-11-23 20:07:14" %}
         Woohoo!
       {% endresponse %}
     {% endresponses %}
