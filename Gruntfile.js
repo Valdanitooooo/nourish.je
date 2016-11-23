@@ -19,7 +19,14 @@ module.exports = function(grunt) {
     uncss: {
       dist: {
         options: {
-          ignoreSheets: ["https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"] 
+          ignore: [
+            '.ui.accordion .accordion .active.content', 
+            '.ui.accordion .active.content',
+            '.ui.accordion .accordion .active.title .dropdown.icon',
+            '.ui.accordion .active.title .dropdown.icon',
+            '.ui.accordion.menu .item .active.title>.dropdown.icon'
+          ],
+          ignoreSheets: ["https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"]
         },
         files: {
           'assets/css/main.css': ['_site/**/*.html']

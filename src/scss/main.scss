@@ -105,6 +105,14 @@ div.social.ui.grid {
 figure {
   margin:0 0 15px 0;
 }
+figure.highlight {
+    font-size:0.875em;
+    margin:0;
+    pre {
+        code {
+        }
+    }
+}
 figcaption {
   margin-top:5px;
   margin-bottom:1em;
@@ -127,4 +135,23 @@ article p code {
     background-color: rgba(0,0,0,0.04);
     border-radius: 3px;
     font-family:"Courier New", monospace;
+}
+.add-comment {
+    float:right;
+    margin-left:10px !important;
+    margin-right:0 !important;
+    @media screen and (max-width:767px) {
+        float:none;
+        width:100%;
+        margin:0 0 15px 0 !important;
+    }
+}
+.ui.comments {
+    blockquote {
+        @extend .ui.message;
+        padding:0.5em 1em;
+        &:first-child {
+            margin-top:1em;
+        }
+    }
 }

@@ -11,9 +11,11 @@
     {% if include.excerpt != true %}
     <div class="extra ui items">
       <div class="item">
+        {% if article.image %}
         <div class="ui small image">
           <img alt="{{ article.title }} thumbnail image" src="{{ site.url }}/assets/images/{{ article.image }}" />
         </div>
+        {% endif %}
         <div class="content">
           <div class="description">{{ article.description }}</div>
           <div class="meta"><i class="tags icon"></i> {% for tag in article.tags %}{{ tag }}{% if forloop.last != true %} - {% endif %}{% endfor %}</div>

@@ -100,11 +100,11 @@ description: "Steve Le Roy Harris is a freelance web and native app developer ba
         </div>
         <a href="/log/" class="ui right floated primary button">View everything</a>
       </div>
-      {% assign article = site.articles[0] %}
+      {% assign article = site.articles | sort: date | reverse | first %}
       <div class="ui card" style="width:calc(66.666% - 2em)">
         <div class="content">
           <div class="ui dividing header">Latest article: <a href="{{ article.url | remove_index }}">{{ article.title }}</a><div class="sub header">{{ article.description }}</div></div>
-          <img class="ui left floated spaced medium image" src="{{ site.url }}/assets/images/{{ article.image }}">
+          {% if article.image %}<img class="ui left floated spaced medium image" src="{{ site.url }}/assets/images/{{ article.image }}">{% endif %}
           <p>{{ article.excerpt }}</p>
           <a class="ui right floated primary button" href="{{ article.url | remove_index }}">Read the rest</a>
         </div>

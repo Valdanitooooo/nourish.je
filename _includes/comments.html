@@ -1,0 +1,45 @@
+{% if subcomments == true %}<div class="comments">{{ comments }}</div>{% else %}
+<div class="ui threaded comments">
+    {% if comments contains "</div>" %}<h2 class="ui dividing header">Comments</h2>{% endif %}
+    {{ comments }}
+    <div class="ui tiny message" style="overflow:hidden">
+        <a class="add-comment ui primary labeled submit icon button" href="{{ comment_url }}">
+          <i class="edit icon"></i> Leave a Comment
+        </a>
+
+        Comments on nourish.je are made via pull request. Replying takes you to GitHub where you can add your comment directly to the source code; send a pull request to get it added to the live site.
+        <div class="ui accordion">
+            <div class="title" style="clear:right;float:right;margin-top:-23px;font-size:0.875em;">
+                <i class="dropdown icon"></i>
+                Formatting help
+            </div>
+            <div class="content" style="clear:right;margin-bottom:-40px;">
+                {% highlight liquid %}
+{% raw %}
+// All comments are contained inside the responses tag
+{% responses %}
+    // Each comment has its own response tag
+    {% response author="Steve" email="steve@nourish.je" date="2016-11-22 19:35:28" %}
+        This is the comment text
+    {% endresponse %}
+    // You can nest responses tags to create threaded comments
+    {% response  author="John" email="john@example.com" date="2016-11-22 19:36:48" %}
+        I'm a top level comment
+        {% responses %}
+            {% response author="Dave" email="dave@example.com" date="2016-11-22 19:37:38" %}
+                I'm a nested comment
+            {% endresponse %}
+            // You can use Markdown inside comments
+            {% response author="Chris" email="chris@example.com" date="2016-11-22 19:38:05" %}
+                **So am I!**
+            {% endresponse %}
+        {% endresponses %}
+    {% endresponse %}
+{% endresponses %}
+{% endraw %}
+                {% endhighlight %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -3,11 +3,13 @@ name: nourish
 email: steve@nourish.je
 highlighter: rouge
 image_folder: /assets/images
-markdown: redcarpet
+markdown: kramdown
 timezone: Europe/London
 upload_folder: /assets/uploads
+git_repo: https://github.com/simlrh/nourish.je
 gems: 
   - jekyll-textile-converter
+  - jekyll-github-comments
 exclude: 
   - node_modules
   - bower_components
@@ -17,6 +19,8 @@ exclude:
   - bower.json
   - s3_website.yml
   - semantic
+github_comments:
+  repo: simlrh/nourish.je
 excerpt_separator: <!--more-->
 collections: 
   articles:

@@ -10,6 +10,8 @@ image: osvr-cardboard.jpg
 <div class="ui stackable equal width grid">
 <div class="column">
 <span class="ui header">"OSVR Cardboard":osvr-cardboard</span> is an iOS app, based on the open source "Moonlight":moonlight game streaming project, which acts as an orientation tracker and remote display for OSVR. This allows you to play PC VR games (including SteamVR games) on your phone using a Google Cardboard viewer.
+
+OSVR Cardboard is currently in the App Store review process.
 </div>
 {% include image src="osvr-cardboard.jpg" alt="OSVR Cardboard logo" %}
 </div>

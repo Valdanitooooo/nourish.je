@@ -1,0 +1,174 @@
+---
+title:  "My new comment system: edit the page source and send a pull request"
+description: "I wanted a comments section, but this site is Jekyll powered, 100% static and hosted on Amazon S3."
+date:   2016-11-23 16:27:00
+tags: [ruby, jekyll, github, software]
+categories: [software]
+excerpt: "<p>For the last couple of years this site has run on Jekyll, the Ruby-based static site generator that powers GitHub Pages. The speed, security, easy version control and traffic-proof nature of a static site means I'll never use anything else unless it absolutely requires dynamic content.</p>
+
+<p>The only downside, for someone sharing their work, their hobbies and their thoughts, is a lack of feedback. No server-side processing means no dynamic content, means no comment system. Writing soon feels like whimpering into an uncaring void.</p>
+
+<p>Here's how I added a comment system to my static site.</p>"
+---
+
+For the last couple of years this site has run on Jekyll, the Ruby-based static site generator that powers GitHub Pages. The speed, security, easy version control and traffic-proof nature of a static site means I'll never use anything else unless it absolutely requires dynamic content.
+
+The only downside, for someone sharing their work, their hobbies and their thoughts, is a lack of feedback. No server-side processing means no dynamic content, means no comment system. Writing soon feels like whimpering into an uncaring void.
+
+Here's how I added a comment system using "GitHub":github pull requests.
+
+h2(ui header). Looking for Solutions
+
+The traditional solution is to embed a third party discussion platform like "Disqus":disqus using JavaScript, but this is unsatisfactory for a few reasons. Embedding Disqus means using Disqus's branding, Disqus accounts, and worst of all Disqus's user tracking code. Security minded users with Ghostery or adblockers installed might not even see the comment section. Comments may not be picked up by search engines as they don't exist on page load. And what if Disqus goes out of business? There go your comments.
+
+The attraction of a static site all neatly version controlled on GitHub is *owning all your own data*, and that's what we need to keep.
+
+"Eduardo Bouças":eduardoboucas has put thought into this problem and his solution is "Staticman":staticman, a webservice that accepts post requests and pushes the data to your git repo (or creates a pull request if you want moderation). It looks awesome, and if you're hosting on GitHub Pages you even get dynamic updating (since pages update on git push) - but I'm still wary of relying on another third party service. It would be great to eliminate even that bit of server side processing.
+
+And honestly, filling in a quick form to post a comment has always seemed a bit *too* easy to me. Make it too simple to leave a stranger feedback and you end up with YouTube. Wouldn't it be cool to ensure only other nerds could comment on your code?
+
+h2(ui header). Enter GitHub
+
+That got me thinking about GitHub's online code editor. I often use it to correct the numerous typos in my @README@ files, but have you ever noticed there's an edit button on __other people's files__ too? 
+
+When you don't have write access to a repo, clicking that button automatically creates a fork and opens the editor. You can commit your changes right there then send a pull request on the next page. Fantastic! We can use this to allow others to edit our pages, adding their comments as they wish. No need to bother writing a comment edit form, or handling server side processing; GitHub already does it.
+
+The more I thought about it the better it seemed as a solution:
+
+- *Increased barrier to entry (effort)* := Without making visitors jump through too many hoops, it's good to make it *slightly* harder to leave a comment than a simple text input. If you need to put time and thought into formatting a response, you'll also put time and thought into what you want to say.
+- *Increased barrier to entry (skill)* := When you write about technical subjects, the best insights are going to come from a technical audience. Although the Liquid template markup is simple, the mechanics of commiting a change and sending a pull request ensure a minimum level of understanding.
+- *Moderation* := Comment moderation is controversial. Some people believe in absolute free speech even in private, and that any moderation system amounts to censorship. Not me! This is my website, I pay the bills. I'll publish what I want on here.
+- *Transparency* := Although I don't want every comment automatically posted, it's only fair that moderation is transparent. With GitHub comments there's a public record of submitted comments in the form of pull requests. Prove I'm too cowardly to debate you by linking to the rejected PR.
+- *Flexibility* := You can provide Markdown for simplicity, but there's really no need to filter or escape your commenters' full HTML. You aren't processing it so there's no risk of injection vulnerabilities, and you're going to manually review the code before merging and going live so you can check for bad behaviour then.
+
+The downside is that maybe the barriers to entry are too high, and you won't get comments at all. But to me, that's much preferable to getting low effort comments.
+
+h2(ui header). Implementation
+
+The simplest implementation would go something like this:
+
+{% highlight html %}
+{% raw %} 
+<a href="https://github.com/simlrh/nourish.je/edit/master/{{ page.path }}">
+  Leave a comment
+</a>
+{% endraw %}
+{% endhighlight %}
+
+<p style="text-align:center"><a class="ui primary labeled submit icon button" href="https://github.com/simlrh/nourish.je/edit/master/{{ page.path }}"><i class="edit icon"></i> Leave a comment</a></p>
+
+But that would be a little *too* cruel to your visitors. Following the link takes them to the top of a long page of code, and when they find the right spot they have to mark up the comment's HTML on their own. No one's going to do it.
+
+"So I put together a small Jekyll plugin to make it easier":jekyll-github-comments. Install <span class="ui header">"jekyll-github-comments":jekyll-github-comments</span> with 
+
+@gem install jekyll-github-comments@
+
+Add to the gems in _config.yaml, and set your git repo name in the configuration options:
+
+{% highlight ruby %}
+gems:
+  - jekyll-github-comments
+github_comments:
+  repo: "simlrh/nourish.je"
+{% endhighlight %}
+
+You can also set the branch you want pull requests to go to, but the default is @master@. 
+
+No templates are included with the plugin, so add your own that suit your site. They go in @_includes@ and by default they're named @comments.html@ for the comment section and @comment.html@ for the individual comments. You can set a different template name in the configuration. See the @README@ for available variables or "this gist":gist for an example.
+
+h2(ui header). Usage
+
+Now it's ready to use. To add a comment section to a page, use the Liquid tag @{% raw %}{% responses %}{% endraw %}@. It's not required, but I put a little comment in there to help people get started:
+
+{% highlight liquid %}
+{% raw %}
+{% responses %}
+  <!-- Fill in this template to comment -->
+  {% response author="Your Name" email="your.email@example.com" date="YYYY-MM-DD HH:MM:SS" %}
+  {% endresponse %}
+{% endresponses %}
+{% endraw %}
+{% endhighlight %}
+
+That @{% raw %}{% response %}{% endraw %}@ tag isn't rendered yet since the content is blank. But when a visitor fills in their name, email & post date, and puts their message inside the block, it will render like this:
+
+<div class="ui segment">
+  <div class="ui comments">
+    {% response author="Steve" email="steve@nourish.je" date="2016-11-23 19:12:56" %}
+      A comment!
+    {% endresponse %}
+  </div>
+</div>
+
+That's a much more manageable amount of code to write.
+
+Not only is the code simple, so is finding where to put it; the "Reply" link of each comment, and the "Leave a comment" link of the comment section as a whole, takes you to the *exact line* of the file where your comment should go.
+
+Comments can be nested, and can optionally support Markdown by running the comment content through the @markdownify@ filter in your template:
+
+{% highlight liquid %}
+{% raw %}
+{% responses %}
+    {% response  author="John" email="john@example.com" date="2016-11-22 19:36:48" %}
+        I'm a top level comment
+        {% responses %}
+            {% response author="Dave" email="dave@example.com" date="2016-11-22 19:37:38" %}
+                I'm a reply
+            {% endresponse %}
+            {% response author="Chris" email="chris@example.com" date="2016-11-22 19:38:05" %}
+              > I'm a top level comment
+
+              *Not me*, I'm **nested!**
+            {% endresponse %}
+        {% endresponses %}
+    {% endresponse %}
+{% endresponses %}
+{% endraw %}
+{% endhighlight %}
+
+renders to:
+
+{% assign subcomments = true %}
+<div class="ui segment">
+  <div class="ui threaded comments">
+  {% responses %}
+    {% response  author="John" email="john@example.com" date="2016-11-22 19:36:48" %}
+      I'm a top level comment
+      {% responses %}
+        {% response author="Dave" email="dave@example.com" date="2016-11-22 19:37:38" %}
+          I'm a reply
+        {% endresponse %}
+        {% response author="Chris" email="chris@example.com" date="2016-11-22 19:38:05" %}
+          > I'm a top level comment
+
+          *Not me*, I'm **nested!**
+        {% endresponse %}
+      {% endresponses %}
+    {% endresponse %}
+  {% endresponses %}
+  </div>
+</div>
+{% assign subcomments = false %}
+
+h2(ui header). Conclusion
+
+My static site now has a nice looking comment section that perfectly matches the design. Comments are stored in plain files, but they can still be restyled via the templating system. Everything is under version control. No server side processing is required, besides what is provided by GitHub, which the site relied on anyway. 
+
+The slight barrier to entry displays just the right level of passive aggression to visitors, and the nerdiness of the system makes me feel smug and self-satisfied.
+
+If you use jekyll-github-comments on your own site please let me know... *__in the comments__*!
+
+[disqus]https://disqus.com/
+[eduardoboucas]https://eduardoboucas.com/blog/2016/08/10/staticman.html
+[staticman]https://staticman.net/
+[github]https://github.com/
+[jekyll-github-comments]https://github.com/simlrh/jekyll-github-comments
+[gist]https://gist.github.com/simlrh/c56573aa19d1b707f6cc086910379e5c
+
+<notextile>
+{% responses %}
+  <!-- Fill in this template to comment -->
+  {% response author="Your Name" email="your.email@example.com" date="YYYY-MM-DD HH:MM:SS" %}
+  {% endresponse %}
+{% endresponses %}
+</notextile>
