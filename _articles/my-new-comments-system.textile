@@ -4,11 +4,12 @@ description: "I wanted a comments section, but this site is Jekyll powered, 100%
 date:   2016-11-23 16:27:00
 tags: [ruby, jekyll, github, software]
 categories: [software]
+image: comments.png
 excerpt: "<p>For the last couple of years this site has run on Jekyll, the Ruby-based static site generator that powers GitHub Pages. The speed, security, easy version control and traffic-proof nature of a static site means I'll never use anything else unless it absolutely requires dynamic content.</p>
 
 <p>The only downside, for someone sharing their work, their hobbies and their thoughts, is a lack of feedback. No server-side processing means no dynamic content, means no comment system. Writing soon feels like whimpering into an uncaring void.</p>
 
-<p>Here's how I added a comment system to my static site.</p>"
+<p>Here's how I added a comment system to my static site.</p><br>"
 ---
 
 For the last couple of years this site has run on Jekyll, the Ruby-based static site generator that powers GitHub Pages. The speed, security, easy version control and traffic-proof nature of a static site means I'll never use anything else unless it absolutely requires dynamic content.
@@ -157,6 +158,8 @@ My static site now has a nice looking comment section that perfectly matches the
 The slight barrier to entry displays just the right level of passive aggression to visitors, and the nerdiness of the system makes me feel smug and self-satisfied.
 
 If you use jekyll-github-comments on your own site please let me know... *__in the comments__*!
+
+<small>*This is actually the real comment section now!</small>
 
 [disqus]https://disqus.com/
 [eduardoboucas]https://eduardoboucas.com/blog/2016/08/10/staticman.html

@@ -92,7 +92,7 @@ description: "Steve Le Roy Harris is a freelance web and native app developer ba
       <div class="ui card">
         <div class="content">
           <div class="ui small feed">
-            {% assign posts = "" | split: "," | concat: site.projects | concat: site.articles | concat: site.tumbles | concat: site.casestudies | sort:'date' | reverse | slice: 0,5 %}
+            {% assign posts = "" | split: "," | concat: site.projects | concat: site.articles | concat: site.tumbles | concat: site.casestudies | sort:'date' | reverse | slice: 0,4 %}
             {% for post in posts %}
               {% include {{ post.collection }}.html post=post excerpt=true %}
             {% endfor %}
