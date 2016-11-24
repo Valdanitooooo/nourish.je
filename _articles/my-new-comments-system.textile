@@ -178,5 +178,8 @@ If you use jekyll-github-comments on your own site please let me know... *__in t
       {% endresponse %}
     {% endresponses %}
   {% endresponse %}
+  {% response author="Jack" email="JKingsman@pennyontherail.com" date="2016-11-24 09:03:14" %}
+     Neat idea -- a little clunky to login to github if I'm viewing it in another app (e.g. Alien Blue on mobile) but definitely something new! I dig it. 
+  {% endresponse %}
 {% endresponses %}
 </notextile>
