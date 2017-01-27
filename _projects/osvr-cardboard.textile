@@ -5,13 +5,14 @@ date:   2016-11-21 16:42:23
 tags: [OSVR, vr, iOS, software, google cardboard]
 categories: [software]
 image: osvr-cardboard.jpg
+head: '<meta name="apple-itunes-app" content="app-id=1178624054">'
 ---
 
 <div class="ui stackable equal width grid">
 <div class="column">
 <span class="ui header">"OSVR Cardboard":osvr-cardboard</span> is an iOS app, based on the open source "Moonlight":moonlight game streaming project, which acts as an orientation tracker and remote display for OSVR. This allows you to play PC VR games (including SteamVR games) on your phone using a Google Cardboard viewer.
 
-OSVR Cardboard is currently in the App Store review process.
+<a href="https://itunes.apple.com/us/app/osvr-cardboard/id1178624054?mt=8" style="display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg.svg) no-repeat;width:135px;height:40px;background-size:contain;"></a>
 </div>
 {% include image src="osvr-cardboard.jpg" alt="OSVR Cardboard logo" %}
 </div>
@@ -50,7 +51,7 @@ Now run an OSVR compatible VR game, put the phone into the viewer and enjoy!
 
 h2(ui dividing header). SteamVR
 
-SteamVR support in OSVR Cardboard is experimental. SteamVR must be used in Extended mode. Start SteamVR, run your game, then find the Steam window named "Headset Window" and click inside it. This should make it fullscreen, and it will appear on the phone.
+SteamVR support in OSVR Cardboard is experimental. SteamVR must be used in Extended mode, and you need to add @"displayName": "Your main PC monitor name"@ to the @osvr@ section of @steamvr.vrsettings@. Start SteamVR, run your game, then find the Steam window named "Headset Window" and click inside it. This should make it fullscreen, and it will appear on the phone.
 
 [osvr-cardboard]https://github.com/simlrh/OSVR-Cardboard-iOS
 [moonlight]http://moonlight-stream.com/

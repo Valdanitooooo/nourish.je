@@ -6,6 +6,7 @@ body {
     height:100px;
     > .menu {
       justify-content:center;
+      -webkit-justify-content:center;
     }
   }
 }
@@ -158,4 +159,15 @@ article p code {
 .avatar {
   background:url("/assets/images/mm.png");
   background-size:100%;
+}
+.ui.menu,
+.ui.grid {
+  display:-webkit-flex;
+}
+.ui[class*="equal width"].grid>.wide.column {
+  -webkit-flex-grow:0 !important;
+}
+.ui[class*="equal width"].grid>.row>.column,
+.ui[class*="equal width"].grid>.column:not(.row) {
+  -webkit-flex-grow:1;
 }

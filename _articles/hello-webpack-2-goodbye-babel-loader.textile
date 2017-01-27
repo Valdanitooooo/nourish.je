@@ -1,0 +1,62 @@
+---
+title:  "Hello Webpack 2, goodbye babel-loader"
+description: "Now that Webpack 2 can handle native ES2015 modules, it no longer makes sense to transpile code in a loader"
+date:   2017-01-27 15:05:00
+tags: [webpack, babel, javascript, software]
+categories: [software]
+image: webpack.jpg
+excerpt: "<p>The traditional way to load ES2015 modules into a webpack app is using babel-loader. With the release of webpack 2, this is no longer necessary - webpack now supports native JavaScript modules as well as Common JS, so code doesn't need to be transformed before it's passed to webpack.</p><p>This article describes how to transpile ES2015 to ES5 in one single operation in the optimisation phase, instead of once per input file in the loader phase, saving a lot of time during compilation.</p>"
+---
+
+The traditional way to load ES2015 modules into a "webpack":webpack app is using "babel-loader":babel-loader. With the release of webpack 2, this is no longer necessary. Webpack now supports native JavaScript modules as well as Common JS, so code doesn't need to be transformed before it's passed to webpack. 
+
+Doing so means "babel":babel is run once for every input file, including anything imported from @node_modules@. And as loaders switch over to returning ES2015 modules, we'd need to start running @babel-loader@ on every single file type, not just JavaScript.
+
+Instead it's preferable to pass webpack ES2015 code (which enables the new tree shaking feature) and then transform the entire bundle into ES5 in one operation. That's the purpose of <span class="ui header">"babel-webpack-plugin":babel-webpack-plugin</span>.
+
+It works in almost exactly the same way as UglifyJsPlugin. Just add to the plugins list (before UglifyJs if you're using it) and the code will be transformed from ES2015 to ES5 all in one go.
+
+h2(ui header). Installation
+
+{% highlight bash %}
+   npm install babel-webpack-plugin
+{% endhighlight %}
+
+h2(ui header). Usage
+
+Add BabelPlugin to the list of plugins:
+
+{% highlight javascript %}
+var BabelPlugin = require("babel-webpack-plugin");
+
+/* ... */
+
+plugins: [
+	new BabelPlugin({
+		test: /\.js$/,
+		presets: ['es2015'],
+		sourceMaps: false,
+		compact: false
+	})
+]
+
+/* ... */
+{% endhighlight %}
+
+h2(ui header). Options
+
+The options above are the default. For all available options, see @babel@ documentation here:babel-docs.
+
+[babel-webpack-plugin]https://github.com/simlrh/babel-webpack-plugin
+[webpack]https://github.com/webpack/webpack
+[babel]https://github.com/babel/babel
+[babel-loader]https://github.com/babel/babel-loader
+[babel-docs]https://babeljs.io/docs/usage/options/
+
+<notextile>
+{% responses %}
+  <!-- Fill in this template to comment -->
+  {% response author="Your Name" email="your.email@example.com" date="YYYY-MM-DD HH:MM:SS" %}
+  {% endresponse %}
+{% endresponses %}
+</notextile>

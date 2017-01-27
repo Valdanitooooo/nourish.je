@@ -8,6 +8,7 @@
     <meta property="fb:profile_id" content="100006240225479">
     {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
     {% if page.image %}<meta property="og:image" content="{{ site.image_folder }}/{{ page.image }}">{% endif %}
+    {{ page.head }}
 
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
 
@@ -17,7 +18,7 @@
     <![endif]-->
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
-    <link rel="stylesheet" href="{{ site.url }}/assets/css/main.css?v=5">
+    <link rel="stylesheet" href="{{ site.url }}/assets/css/main.css?v=8">
   </head>
 
   <body>
