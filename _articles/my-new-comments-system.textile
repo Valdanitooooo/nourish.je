@@ -184,5 +184,8 @@ If you use jekyll-github-comments on your own site please let me know... *__in t
   {% response author="Jeff" email="rlxrlps@gmail.com" date="2016-11-24 21:03:14" %}
      I'm contributing to open source, technically. Woohoo!
   {% endresponse %}
+  {% response author="Valdanito" email="valdanito@qq.com" date="2017-05-29 16:35:52" %}
+     That's so cool !!!
+  {% endresponse %}
 {% endresponses %}
 </notextile>
